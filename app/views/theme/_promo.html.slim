@@ -1,0 +1,18 @@
+section#promo-banner
+  .overlay-bg= image_tag 'markup/promo-bg.jpg', class: 'img-fluid img-bg'
+  .wrap-content
+    #promo-content
+      .container
+        .row.justify-content-center
+          .col-lg-10.col-xl-7
+            h3.title= @main_video.short_title
+            .info= text_briefly(@main_video.description)
+section#promo-video
+  .container
+    #thumb-video data-video="#{youtube_id(@main_video.link)}"
+      #utube-video
+      .run-video
+        = @contents.watch_video
+        span.circle
+          i.fa.fa-play
+      = image_tag 'markup/promo.jpg', class: 'img-fluid'
