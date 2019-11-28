@@ -13,7 +13,4 @@
 //= require rails-ujs
 //= require activestorage
 //= require_tree ./application
-//= require jquery.flexslider
-$(document).ready(function(){
-    $('.flexslider').flexslider();
-});
+
