@@ -15,4 +15,18 @@ section#promo-video
         = @contents.watch_video
         span.circle
           i.fa.fa-play
-      = image_tag 'markup/promo.jpg', class: 'img-fluid'
+      #main-slider.main-slider
+        div
+          .video-wrapper
+            iframe src="https://www.youtube.com/embed/0Y8YLC7YHyg?rel=0"
+        div
+          .video-wrapper
+            iframe src="https://www.youtube.com/embed/cXgPEqzCn9U?crel=0"
+        div
+          .video-wrapper
+            iframe src="https://www.youtube.com/embed/8J_o9CcRoNw?rel=0"
+        div
+          .video-wrapper
+            iframe src="https://www.youtube.com/embed/S5U99iJhIyY?rel=0"
+
+= javascript_include_tag 'invest_map'
