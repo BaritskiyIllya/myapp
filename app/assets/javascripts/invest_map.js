@@ -1,20 +1,110 @@
-$('#main-slider').slick({
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    dots: true,
-    infinite: true,
-    adaptiveHeight: true,
-    arrows: false
-});
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-var video = $('#main-slider .slick-active').find('iframe').get(0).play();
+var players = {};
+function onYouTubeIframeAPIReady() {
 
-$('#main-slider').on('afterChange', function(event, slick, currentSlide, nextSlide){
-    $('#main-slider .slick-slide').find('video').get(0).pause();
-    var video = $('#main-slider .slick-active').find('video').get(0).play();
-});
+    $(".slick iframe").each(function(id) {
+        var $iframe = $(this).get(0);
+
+        if ($iframe) { //If iFrame exists and has an ID
+            players = new YT.Player($iframe, {
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+
+        }
+    });
+
+}
+
+// Start Slick autoplay when Youtube Player is ready
+function onPlayerReady() {
+    console.log('Slider is ready for autoplay');
+    $('.main-slider').slick('slickPlay');
+}
+
+// On player change callback
+function onPlayerStateChange(obj) {
+
+    // -1 (unstarted)
+    // 0 (ended)
+    // 1 (playing)
+    // 2 (paused)
+    // 3 (buffering)
+    // 5 (video cued)
+
+    if (obj.data == 1) { // means video is playing
+
+        $('.main-slider').slick('slickPause');
+
+        console.log('playing');
+
+    } else if (obj.data == 2) { // means video in on pause
+
+        $('.main-slider').slick('slickPlay');
+
+        console.log('NOT playing');
+
+    }
+}
+(function($) {
+    jQuery(document).ready(function($) {
+
+
+        $(".main-slider").on("beforeChange", function(event, slick) {
+            var currentSlide, player, command;
+
+            // Find the current slide element and decide which player API we need to use.
+            currentSlide = $(slick.$slider).find(".slick-current");
+
+
+            // Get the iframe inside this slide.
+            player = currentSlide.find("iframe").get(0);
+
+            // Special parametrs for Youtube API
+            command = {
+                "event": "command",
+                "func": "pauseVideo"
+            };
+
+
+            //check if the player exists.
+            if ( player != undefined ) {
+
+                //post our command to the iframe.
+                player.contentWindow.postMessage(JSON.stringify(command), "*");
+
+            }
+
+
+
+        });
+
+        //start the slider
+        $('#main-slider').slick({
+            lazyLoad: 'ondemand',
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 3000,
+            dots: true,
+            infinite: true,
+            adaptiveHeight: true,
+            arrows: false
+        });
+
+        //run the fitVids jQuery plugin to ensure the iframes stay within the item.
+        $('.item').fitVids();
+
+    });
+})(jQuery);
+
+
 
 $('.projects').slick({
   lazyLoad: 'ondemand',
